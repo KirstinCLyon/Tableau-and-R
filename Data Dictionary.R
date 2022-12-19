@@ -15,47 +15,68 @@ library(data.table)
 
 
 
-# Folder structure ----
+# Folder structure (not strictly needed)----
 folder_setup(
     folder_list = list("Data", "Images", "Scripts", "AI", "Dataout", "GIS", "Documents",
                        "Graphics", "markdown", "Tableau")
 )
 
 
-# Global Variables in all caps ----
+#ReadME - creating the initial XML dataset ----
 
+# 1. Unpack tableau file (should be a .twb not a .twbx)
+# 2. Rename tableau file to chance file type from .twb to .xml
 
 # Read data ----
 twb_file <- read_xml("Data/Test.xml")
 
 
-# Isolate datasources part of xml ----
-datasources_twb <- xml_child(twb_file, "datasources")
-datasources_twb
-
 # There are two "datasources" - the top relates to parameters, and the bottom relates to fields 
 # https://www.w3schools.com/XML/xml_xpath.asp
 
+#Scenario 1:  Raw data ----
+
+all_cols_raw <- xml_find_all(twb_file, xpath = ".//column")
+all_cols_raw_xml <- lapply(xml_attrs(all_cols_raw), as.list)
+all_cols_raw_df <- rbindlist(all_cols_raw_xml,fill = TRUE)
+
+
+all_raw_tbl <- all_cols_raw_df %>% 
+    filter(!is.na(type),is.na(caption)) %>% 
+    mutate(formula = "", name = str_remove_all(name, "[\\[\\]]")) %>% 
+    select(-ordinal, -caption) 
 
 
 
-# Data Dictionary for all Calculations
-all_columns <- xml_find_all(datasources_twb, xpath=".//column[@caption]")  #search for cases where there is no caption - that's the columns that aren't calculations
-all_cols_xml <- lapply(xml_attrs(all_columns), as.list)
-all_fields_df <- rbindlist(all_cols_xml, fill=TRUE)
+all_raw_tbl
 
-all_calculations <- xml_find_all(datasources_twb, xpath=".//column/calculation")
-all_calcs_xml <- lapply(xml_attrs(all_calculations), as.list)
-all_calcs_df <-  rbindlist(all_calcs_xml,fill = TRUE)
+# Sceanrio 2:  calculations ----
 
-data_dictionary_tbl <- bind_cols(all_fields_df, all_calcs_df)
+all_cols_calcs <- xml_find_all(twb_file, xpath=".//column[@caption]")  
+all_cols_calcs_xml <- lapply(xml_attrs(all_cols_calcs), as.list)
+all_cols_calcs_df <- rbindlist(all_cols_calcs_xml, fill=TRUE)
 
-# clean data
-calculation <- data_dictionary_tbl %>% 
-    select(-name) %>% 
+all_cols_calcs_details <- xml_find_all(twb_file, xpath=".//column/calculation")
+all_cols_calcs_details_xml <- lapply(xml_attrs(all_cols_calcs_details), as.list)
+all_cols_calcs_details_df <-  rbindlist(all_cols_calcs_details_xml,fill = TRUE)
+
+all_calcs_tbl <- bind_cols(all_cols_calcs_df, all_cols_calcs_details_df) %>% 
+    distinct() %>% 
+    select(-name, -class) %>% 
     rename("name" = "caption")
 
-data_dictionary_tbl
+all_calcs_tbl
 
 
-#Questions:  why do you get the fields with no calculations 3 times? and the calculations 3 times?  and why are calculations kept in a separate list?
+# Combine raw and calculations and output data ----
+
+data_dictionary_tbl <- all_raw_tbl %>% 
+    union(all_calcs_tbl) %>% 
+    mutate_all(na_if,"") %>%
+    rename(default_format = `default-format`) %>% 
+    select(name, datatype, role, type, default_format, formula) %>% 
+    write_csv("Dataout/Data Dictionary.csv")
+
+
+glimpse(data_dictionary_tbl)
+
