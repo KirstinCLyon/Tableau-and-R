@@ -1,0 +1,10 @@
+name,datatype,role,type,default-format,formula,alias,tableau_name,param-domain-type
+Profit,integer,measure,quantitative,NA,NA,NA,NA,NA
+Sales,integer,measure,quantitative,NA,NA,NA,NA,NA
+Sub-Category,string,dimension,nominal,NA,NA,NA,NA,NA
+Test,integer,measure,quantitative,NA,1,yes,[Parameter 1],list
+Profit Ratio,real,measure,quantitative,p0%,SUM([Profit])/SUM([Sales]),NA,[Calculation_390124356501323776],NA
+Test parameter,integer,measure,quantitative,NA,"case [Parameters].[Parameter 1]
+when 1 then [Profit]
+when 2 then [Sales]
+END",NA,[Calculation_718887133855891456],NA
