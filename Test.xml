@@ -24,7 +24,7 @@
   <datasources>
     <datasource hasconnection='false' inline='true' name='Parameters' version='18.1'>
       <aliases enabled='yes' />
-      <column alias='yes' caption='Kirstin Test' datatype='integer' name='[Parameter 1]' param-domain-type='list' role='measure' type='quantitative' value='1'>
+      <column alias='yes' caption='Test' datatype='integer' name='[Parameter 1]' param-domain-type='list' role='measure' type='quantitative' value='1'>
         <calculation class='tableau' formula='1' />
         <aliases>
           <alias key='1' value='yes' />
@@ -130,7 +130,7 @@
       </column>
       <_.fcp.ObjectModelTableType.true...column caption='Sheet2' datatype='table' name='[__tableau_internal_object_id__].[Sheet2_D98E5B2F01B14442AE09171A7B3BF081]' role='measure' type='quantitative' />
       <extract _.fcp.ObjectModelExtractV2.true...object-id='' count='-1' enabled='true' units='records'>
-        <connection access_mode='readonly' authentication='auth-none' author-locale='en_GB' class='hyper' dbname='C:/Users/kirst/Sync/Projects/Tableau and R automation/Data/Test.twb Files/Data/Test.twb Files/federated.hyper' default-settings='yes' schema='Extract' sslmode='' tablename='Extract' update-time='12/07/2022 11:39:42 AM' username='tableau_internal_user'>
+        <connection access_mode='readonly' authentication='auth-none' author-locale='en_GB' class='hyper' dbname='C:/Users/kirst/Sync/Projects/Tableau and R automation/Test.twb Files/Data/Test.twb Files/federated.hyper' default-settings='yes' schema='Extract' sslmode='' tablename='Extract' update-time='12/07/2022 11:39:42 AM' username='tableau_internal_user'>
           <_.fcp.ObjectModelEncapsulateLegacy.false...relation name='Extract' table='[Extract].[Extract]' type='table' />
           <_.fcp.ObjectModelEncapsulateLegacy.true...relation name='Extract' table='[Extract].[Extract]' type='table' />
           <refresh increment-key='' incremental-updates='false'>
@@ -189,7 +189,7 @@
       </semantic-values>
       <date-options start-of-week='monday' />
       <datasource-dependencies datasource='Parameters'>
-        <column alias='yes' caption='Kirstin Test' datatype='integer' name='[Parameter 1]' param-domain-type='list' role='measure' type='quantitative' value='1'>
+        <column alias='yes' caption='Test' datatype='integer' name='[Parameter 1]' param-domain-type='list' role='measure' type='quantitative' value='1'>
           <calculation class='tableau' formula='1' />
           <aliases>
             <alias key='1' value='yes' />
