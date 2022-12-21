@@ -5,5 +5,6 @@ Data Dictionary.R creates a data dictionary using all fields from Tableau.  This
 
 This is inspired by the following work which provides a similar output but uses Python:
 https://thedotviz.com/index.php/2019/05/27/tableau-calculation-extractor/
+
 https://github.com/practo/tableau-parser
 
